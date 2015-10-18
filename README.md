@@ -40,3 +40,8 @@ To use dependencies from private repositories in your project:
 To push to specific repo:
 
 **TODO**
+
+## TODO
+
+- [ ] Doesn't support Boot default respositories `[["id" "url"]]`, should instead be `[["id" {:url "url"}]]`
+- [ ] All repos need `:creds :gpg` for push to check for gpg credentials
