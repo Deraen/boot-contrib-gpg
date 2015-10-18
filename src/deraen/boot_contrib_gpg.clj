@@ -8,7 +8,8 @@
             [clojure.java.io :as io]
             [clojure.java.shell :as shell]
             [clojure.string :as string])
-  (:import [java.util.regex Pattern]))
+  (:import [java.util.regex Pattern]
+           [java.net URL]))
 
 ;; START lein code
 
@@ -122,9 +123,12 @@
 
 (comment
   (resolve-credentials {:url "http://clojars.org/repo"
+                        :creds :gpg})
+  (resolve-credentials {:url "https://my.datomic.com/repo"
                         :creds :gpg}))
 
-(defn set-repositories [repositories]
-  (core/set-env! :repositories (into (empty repositories)
-                                     (for [[k v] repositories]
-                                       [k (resolve-credentials v)]))))
+(defn set-repositories! [repositories]
+  (let [repositories (into (empty repositories)
+                           (for [[id settings] repositories]
+                             [id (resolve-credentials settings)]))]
+    (core/set-env! :repositories #(into % repositories))))
